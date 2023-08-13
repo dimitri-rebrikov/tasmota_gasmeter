@@ -1,5 +1,5 @@
 # Tasmota-basierter Gaszähler-Logger für Volkszähler
-Das Project beschreibt die Implementierung eines Geräts zur Übertragung der momentanen Verbrauchswerte sowie den Zählerstand eines Gaz-Zählers an die [Volkszähler-Middleware](https://wiki.volkszaehler.org/start)
+Das Project beschreibt die Implementierung eines Geräts zur Übertragung der momentanen Verbrauchswerte sowie des Zählerstandes eines Gaz-Zählers an die [Volkszähler-Middleware](https://wiki.volkszaehler.org/start)
 
 
 ## Hardware
