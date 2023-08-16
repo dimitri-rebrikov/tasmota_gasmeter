@@ -43,7 +43,24 @@ Es reicht ein Handelsüblicher USB-Ladegerät mit einem Micro-USB-Anschluss.
 
 ### Volkszähler-Einstellung
 
-to be continued...
+#### Volkszähler-Installation
+Als Erstes muss die [Volkszähler-Software](https://volkszaehler.org/) selbst [installiert](https://wiki.volkszaehler.org/howto/getstarted) werden. Meine läuft auf einem Raspberry Pi 3.
+Theoretisch kann für den Anfang die Demo-Installation auf der [Homepage](https://volkszaehler.org/) verwendet werden.
+
+#### Kanäle einrichten
+Für das Projekt werden 2 Kanäle benötigt:
+1. für momentane Verbrauchwerte
+2. für den Zählerstand
+
+Die Konfiguration wie auf den Bildern:
+
+![Momentaner Verbrauch](./media/Volkszaehler_Gasverbrauch.png)
+
+![Zählerstand](./media/Volkszaehler_Gas-Zaehlerstand.png)
+
+Die Auflösung ist normalerweise auf dem Zähler angegeben:
+![Auflösung](./media/GasMeter.jpg)
+0.01 -> 100
 
 ### Tasmota-Einstellungen
 
@@ -70,7 +87,7 @@ Diese GPIO wird and das grüne LED angeschlossen und von Tasmota automatisch mit
 Diese GPIO wird and das rote LED angeschlossen und programmatisch für kurze Zeit bei jedem Schließen des Reed-Kontaktes eingeschaltet.
 
 #### Programmierung der Logik
-Die Programmierung der Logik erfolgt über die eingabe der Befehle in der Web-Console:
+Die Programmierung der Logik erfolgt über die eingabe der Befehle in der Tasmota-Web-Console:
 
 to be continued...
 
