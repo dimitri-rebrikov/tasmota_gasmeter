@@ -127,3 +127,28 @@ In meinem Fall:
 | Zählerstand | 1208,435 |
 | Auflösung | 0,01 |
 | Zu setzende Wert des internen Tasmota-Zählers| 120843|
+
+## Aufbau/Gehäuse
+Als Gehäuse habe ich einen DLAN-Adapter "ausgeschlachtet" der zwar noch funktionstüchtig aber für mich völlig nutzlos rumlag.
+
+Der Vorteil des DLAN-Adapters für mich war, dass er keine zusätzliche Netzwerk-Dose belegt.
+
+Für die Stromversorgung habe ich ein integriertes 5v Netzeil besorgt:
+
+![Netzteil](./media/power.png)
+
+Die Schaltung ist auf einer Lochplatine umgesetzt. Die LED's sind so platziert, dass sie durch die bereits vorhandenen LED-Öffnungen des DLAN-Adapter hindurch leuchten.
+
+Aufgrund der engen Platzverhältnisse musste ich auf die sog. Stacked-Implementierung zurückgreifen, bei der die Platinen aufeinander sitzen:
+
+![Stacked Platinen](./media/circuit3.png)
+
+Die finale Zusammensetzung sieht wie folgt aus:
+
+![Assembly](./media/casing5.png)
+
+Die Messing-Abstandshalter der Platinen sind mit dem Heißkleber am Boden des Gehäuses verklebt. Die Platinen selbst können bei Bedarf durch das Abschrauben von den Abstandshalter gelöst werden.
+
+Das Netzeil wird horizontal von 2 Seiten durch die Seitenwände und and der freien Ecke durch den Heißkleber gehalten. Der Kleber haftet aber nur am DLAN-Gehäuse, so dass das Netzteil auch jederzeit entnommen werden kann. Vertikal wird es beim Schließen des Gehäuses durch den Schaumstoff fest gehalten.
+
+![Assembled](./media/casing6.png)
