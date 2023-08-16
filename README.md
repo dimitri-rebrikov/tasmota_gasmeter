@@ -58,7 +58,7 @@ Die Konfiguration ist wie auf den Bildern:
 
 ![Zählerstand](./media/Volkszaehler_Gas-Zaehlerstand.png)
 
-Der für das Einrichtung der Kanäle benötige Auflösung-Wert ist normalerweise auf dem Gas-Zähler vermerkt. Beispiel vom Meinen:
+Der für die Einrichtung der Kanäle benötige Auflösung-Wert ist normalerweise auf dem Gas-Zähler vermerkt. Beispiel:
 ![Auflösung](./media/GasMeter.jpg)
 Der Wert muss für die Eingabe invertiert werden. I.e. 0.01 -> 100
 
@@ -67,11 +67,11 @@ Der Wert muss für die Eingabe invertiert werden. I.e. 0.01 -> 100
 ### Vorbereitung
 Die Tasmota installation is ausführlich im Netz [beschrieben](https://tasmota.github.io/docs/Getting-Started/).
 Ich habe die [Web-Installation](https://tasmota.github.io/install/) verwendet.
-Vor der Tasmota-Installation müssen noch entsprechende [Windows-Treiber](https://www.wemos.cc/en/latest/ch340_driver.html) für die Übertragung installiert werden.
-Nach der erfolgreichen Tasmota-Installation muss diese noch in dem Heim-WiFi-Netzwerk eingeloggt werden. Dafür wird mit einem Smartphone zunächst direct ins Tasmota-WiFi-Netzwerk eingeloggt. Dann konfiguriert man Tasmota für die Verbindung mit dem Heim-WiFi und anschließen verbindet man sich mit Tasmota über das Heim-WiFi. 
+Vor der Tasmota-Installation müssen die entsprechenden [Windows-Treiber](https://www.wemos.cc/en/latest/ch340_driver.html) für die Übertragung installiert werden.
+Nach der erfolgreichen Tasmota-Installation muss diese noch in dem Heim-WiFi-Netzwerk eingeloggt werden. Dafür wird z.B. mit einem Smartphone zunächst direct ins Tasmota-WiFi-Netzwerk eingeloggt. Dadurch wird automatisch dei Konfiguration-Seite angezeigt. Hier konfiguriert man Tasmota für die Verbindung mit dem Heim-WiFi und startet Tamota neu. Anschließend verbindet man sich mit dem Heim-WiFi und ruft die Tasmota-IP-Adresse für weiter Konfigurationen auf.
 
 ### Konfiguration der GPIO's
-Zuerst wird das Modul-Typ ausgewählt und gespeichert, was zu einem Neustart von Tasmota führt.
+Zuerst wird der Modul-Typ ausgewählt und gespeichert, was zu einem Neustart von Tasmota führt.
 
 ![Auswahl des Modul-Types](./media/Tasmota_ModuleType_Generic18.png)
 
@@ -81,7 +81,7 @@ Anschließend werden die GPIO's wie auf dem Bild eingestellt:
 #### D4/Switch/1
 Diese GPIO wird elektronisch geschaltet und registriert das Schließen des Reedschalters.
 #### D3/Counter/1
-Dieser Zähler wird nur programmatisch geschaltet. Und zwar bietet Tasmota leider keine Möglichkeit eines rein virtuellen Zählers. Es gibt zwar Variablen, diese "überleben" aber den Neustart nicht. Deswegen muss man eine GPIO für einen Zähler "opfern" auch wenn dieser nicht von aussen elektronisch gesteuert wird.
+Dieser Zähler wird nur programmatisch geschaltet. Tasmota bietet leider keine Möglichkeit eines rein virtuellen Zählers. Es gibt zwar Variablen, deren Werte "überleben" aber den Neustart nicht. Deswegen muss man eine GPIO für einen Zähler "opfern" auch wenn dieser nicht von aussen elektronisch gesteuert wird.
 #### D2/Led_i/1 
 Diese GPIO wird and das grüne LED angeschlossen und von Tasmota automatisch mit dem Status der WiFi-Verbindung versorgt. Blinken:keine WiFi. Durchgehend leuchten: die WiFi-Verbindung besteht.
 
@@ -103,7 +103,7 @@ Die `Rule1` wird beim Schließen des Reedschalters aktiviert und macht folgendes
 3. Schalten des roten LED für 20 sek
 4. Schicken des internen Zählerstands and den Zählerstand-Kanal
 
-Damit die Regel funktioniert müssen folgende Bestandteile durch Ihre Werte ersetzt werden:
+Damit die Regel richtig funktioniert müssen folgende Bestandteile durch Ihre Werte ersetzt werden:
 
 |Wert| zu ersetzen durch|
 |----|------------------|
@@ -131,15 +131,15 @@ In meinem Fall:
 ## Aufbau/Gehäuse
 Als Gehäuse habe ich einen DLAN-Adapter "ausgeschlachtet" der zwar noch funktionstüchtig aber für mich völlig nutzlos rumlag.
 
-Der Vorteil des DLAN-Adapters für mich war, dass er keine zusätzliche Netzwerk-Dose belegt.
+Der Vorteil des DLAN-Adapters für mich war, dass er keine zusätzliche Steckdose belegt.
 
 Für die Stromversorgung habe ich ein integriertes 5v Netzeil besorgt:
 
 ![Netzteil](./media/power.png)
 
-Die Schaltung ist auf einer Lochplatine umgesetzt. Die LED's sind so platziert, dass sie durch die bereits vorhandenen LED-Öffnungen des DLAN-Adapter hindurch leuchten.
+Die Schaltung ist auf einer Lochrasterplatine umgesetzt. Die LED's sind so platziert, dass sie durch die bereits vorhandenen LED-Öffnungen des Gehäuses hindurch leuchten.
 
-Aufgrund der engen Platzverhältnisse musste ich auf die sog. Stacked-Implementierung zurückgreifen, bei der die Platinen aufeinander sitzen:
+Aufgrund der engen Platzverhältnisse musste ich auf die sog. Stacked-Implementierung zurückgreifen, bei der die Platinen übereinander platziert sind:
 
 ![Stacked Platinen](./media/circuit3.png)
 
