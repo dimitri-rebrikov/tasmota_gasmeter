@@ -72,9 +72,11 @@ Nach der erfolgreichen Tasmota-Installation muss diese noch in dem Heim-WiFi-Net
 
 #### Konfiguration der GPIO's
 Zuerst das Modul-Typ ausgewählt und gespeichert wird, was zu einem Neustart von Tasmota führt.
+
 ![Auswahl des Modul-Types](./media/Tasmota_ModuleType_Generic18.png)
 
 Anschließend werden die GPIO's wie auf dem Bild eingestellt:
+
 ![Konfiguration der GPIO's](./media/Tasmota_GPIO_Config.png)
 ##### D4/Switch/1
 Diese GPIO wird elektronisch geschaltet und registriert das Schließen des Reed-Kontaktes.
@@ -87,7 +89,41 @@ Diese GPIO wird and das grüne LED angeschlossen und von Tasmota automatisch mit
 Diese GPIO wird and das rote LED angeschlossen und programmatisch für kurze Zeit bei jedem Schließen des Reed-Kontaktes eingeschaltet.
 
 #### Programmierung der Logik
-Die Programmierung der Logik erfolgt über die eingabe der Befehle in der Tasmota-Web-Console:
+Die Programmierung der Logik erfolgt über die Eingabe der [Tasmota-Commands](https://tasmota.github.io/docs/Commands/) in der Tasmota-Web-Console:
 
-to be continued...
+##### Command 1
+`Backlog SetOption114 1; SwitchMode 2; SwitchDebounce 50;`
 
+##### Command 2
+`Rule1 ON Switch1#State=1 DO Backlog WebSend [192.168.178.77:8080] /data/c8b10730-2e21-11ee-bb5a-3fa7c996303b.json?operation=add; Counter1 +1; Power1 1; Delay 20; Power1 0 ENDON ON Counter1#Data DO WebSend [192.168.178.77:8080] /data/99dc1b00-2e21-11ee-9221-c31d5b1d4b10.json?operation=add&value=%value% ENDON`
+
+Die `Rule1` wird beim Schließen des Reed-Schalters aktiviert und macht folgendes:
+1. Senden eines Verbrauchsignals (d.h. 0.01 m2) and den Verbrauchskanal
+2. Inkrementieren des internen Zählerstands
+3. Schalten des roten LED für 20 sek
+4. Schicken des internen Zählerstands and den Zählerstand-Kanal
+
+Damit dir Regel funktioniert müssen folgende Bestandteile durch Ihre Werte ersetzt werden:
+
+|Wert| zu ersetzen durch|
+|----|------------------|
+|192.168.178.77| die IP-Adresse der Volkszählers im Ihrem Netz|
+|c8b10730-2e21-11ee-bb5a-3fa7c996303b| den UUID des von Ihnen erstellten Verbrauchskanals |
+|99dc1b00-2e21-11ee-9221-c31d5b1d4b10| den UUID des von Ihnen erstellten Zählerstand-Kanals |
+
+##### Command 3
+`Rule1 1`
+
+Aktiviert die `Rule1`
+
+##### Command 4
+`Counter1 120843`
+
+Setzt den initialen Wert internen Zählers auf den Wert vom Gaszähler. Dabei soll die ermittelte Auflösung des Zähler-Magnetes berücksichtigt werden. 
+
+In meinem Fall: 
+| | |
+|---|----|
+| Zählerstand | 1208,435 |
+| Auflösung | 0,01 |
+| Zu setzende Wert des internen Tasmota-Zählers| 120843|
