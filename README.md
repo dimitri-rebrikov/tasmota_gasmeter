@@ -18,36 +18,36 @@ Das Auslesen der momentanen Verbrauchswerte erfolgt über einen [Reedshalter](ht
 
 Ich habe für mich für den originalen [IN-Z61](https://process.honeywell.com/us/en/site/elster-instromet-de/produkte/gasmessung/balgengaszahler/in-z61) Reedschalter entschieden.
 
-### Schaltplan
+## Schaltplan
 
 ![Shaltplane](./media/TasmotaGasMeter_CircuitDiagram.png)
 
-#### Erklärung zum Schaltplan
+### Erklärung zum Schaltplan
 
-##### S1 "IN-Z61"
+#### S1 "IN-Z61"
 die einzige nicht-optionale Komponente (außer ESP8266) auf dem Schaltplan. Beim Schließen wird der [D4/GPIO2](https://www.wemos.cc/en/latest/d1/d1_mini_lite.html#pin) Kontakt des Chips auf 0 gesetzt. Der Kontakt D4 besitzt einen internen [Pull-up Resistor](https://en.wikipedia.org/wiki/Pull-up_resistor), somit muss man keinen eigenen einlöten. 
 
 Der Kontakt D4 hat noch eine andere Besonderheit: an ihm ist das Platinen-interne LED angeschlossen. Schliesst man den S1, so leuchtet das LED rein elektronisch (i.e. ohne jegliche Software-Logik), was die Suche nach Fehlern erleichtert.
 
-##### C1, C2
+#### C1, C2
 Diese beiden Kondensatoren sollen die Laufzeit-Stabilität erhöhen. Der kleine filtert hochfrequente Störungen, der Große - die niedrigfrequente Schwankungen.
 
 Die beiden sollen am besten direkt zwischen 3V3 und G(ND) eingelötet werden.
 
-##### Rot-/Grün-LED's
+#### Rot-/Grün-LED's
 Das grüne LED signalisiert die Verbindung mit dem WiFi (durchgehendes Leuchten).
 Das Rote leuchtet kurz auf bei jedem Auslösen des Reedschalters (programmiert).
 
-##### Stromversorgung
+#### Stromversorgung
 Es reicht ein Handelsüblicher USB-Ladegerät mit einem Micro-USB-Anschluss.
 
-### Volkszähler-Einstellung
+## Volkszähler-Einstellung
 
-#### Volkszähler-Installation
+### Volkszähler-Installation
 Als Erstes muss die [Volkszähler-Software](https://volkszaehler.org/) selbst [installiert](https://wiki.volkszaehler.org/howto/getstarted) werden. Meine läuft auf einem Raspberry Pi 3.
 Theoretisch kann für den Anfang die Demo-Installation auf der [Homepage](https://volkszaehler.org/) verwendet werden.
 
-#### Kanäle einrichten
+### Kanäle einrichten
 Für das Projekt werden 2 Kanäle benötigt:
 1. für momentane Verbrauchwerte
 2. für den Zählerstand
@@ -62,15 +62,15 @@ Der für das Einrichtung der Kanäle benötige Auflösung-Wert ist normalerweise
 ![Auflösung](./media/GasMeter.jpg)
 Der Wert muss für die Eingabe invertiert werden. I.e. 0.01 -> 100
 
-### Tasmota-Einstellungen
+## Tasmota-Einstellungen
 
-#### Vorbereitung
+### Vorbereitung
 Die Tasmota installation is ausführlich im Netz [beschrieben](https://tasmota.github.io/docs/Getting-Started/).
 Ich habe die [Web-Installation](https://tasmota.github.io/install/) verwendet.
 Vor der Tasmota-Installation müssen noch entsprechende [Windows-Treiber](https://www.wemos.cc/en/latest/ch340_driver.html) für die Übertragung installiert werden.
 Nach der erfolgreichen Tasmota-Installation muss diese noch in dem Heim-WiFi-Netzwerk eingeloggt werden. Dafür wird mit einem Smartphone zunächst direct ins Tasmota-WiFi-Netzwerk eingeloggt. Dann konfiguriert man Tasmota für die Verbindung mit dem Heim-WiFi und anschließen verbindet man sich mit Tasmota über das Heim-WiFi. 
 
-#### Konfiguration der GPIO's
+### Konfiguration der GPIO's
 Zuerst wird das Modul-Typ ausgewählt und gespeichert, was zu einem Neustart von Tasmota führt.
 
 ![Auswahl des Modul-Types](./media/Tasmota_ModuleType_Generic18.png)
@@ -78,23 +78,23 @@ Zuerst wird das Modul-Typ ausgewählt und gespeichert, was zu einem Neustart von
 Anschließend werden die GPIO's wie auf dem Bild eingestellt:
 
 ![Konfiguration der GPIO's](./media/Tasmota_GPIO_Config.png)
-##### D4/Switch/1
+#### D4/Switch/1
 Diese GPIO wird elektronisch geschaltet und registriert das Schließen des Reedschalters.
-##### D3/Counter/1
+#### D3/Counter/1
 Dieser Zähler wird nur programmatisch geschaltet. Und zwar bietet Tasmota leider keine Möglichkeit eines rein virtuellen Zählers. Es gibt zwar Variablen, diese "überleben" aber den Neustart nicht. Deswegen muss man eine GPIO für einen Zähler "opfern" auch wenn dieser nicht von aussen elektronisch gesteuert wird.
-##### D2/Led_i/1 
+#### D2/Led_i/1 
 Diese GPIO wird and das grüne LED angeschlossen und von Tasmota automatisch mit dem Status der WiFi-Verbindung versorgt. Blinken:keine WiFi. Durchgehend leuchten: die WiFi-Verbindung besteht.
 
-##### D1/Relay/1
+#### D1/Relay/1
 Diese GPIO wird and das rote LED angeschlossen und programmatisch für kurze Zeit bei jedem Schließen des Reedschalters eingeschaltet.
 
-#### Programmierung der Logik
+### Programmierung der Logik
 Die Programmierung der Logik erfolgt über die Eingabe der [Tasmota-Commands](https://tasmota.github.io/docs/Commands/) in der Tasmota-Web-Console:
 
-##### Command 1
+#### Command 1
 `Backlog SetOption114 1; SwitchMode 2; SwitchDebounce 50;`
 
-##### Command 2
+#### Command 2
 `Rule1 ON Switch1#State=1 DO Backlog WebSend [192.168.178.77:8080] /data/c8b10730-2e21-11ee-bb5a-3fa7c996303b.json?operation=add; Counter1 +1; Power1 1; Delay 20; Power1 0 ENDON ON Counter1#Data DO WebSend [192.168.178.77:8080] /data/99dc1b00-2e21-11ee-9221-c31d5b1d4b10.json?operation=add&value=%value% ENDON`
 
 Die `Rule1` wird beim Schließen des Reedschalters aktiviert und macht folgendes:
@@ -111,12 +111,12 @@ Damit die Regel funktioniert müssen folgende Bestandteile durch Ihre Werte erse
 |c8b10730-2e21-11ee-bb5a-3fa7c996303b| den UUID des von Ihnen erstellten Verbrauchskanals |
 |99dc1b00-2e21-11ee-9221-c31d5b1d4b10| den UUID des von Ihnen erstellten Zählerstand-Kanals |
 
-##### Command 3
+#### Command 3
 `Rule1 1`
 
 Aktiviert die `Rule1`
 
-##### Command 4
+#### Command 4
 `Counter1 120843`
 
 Setzt den initialen Wert des internen Zählers auf den realen Wert vom Gaszähler. Dabei soll die ermittelte Auflösung des Zähler-Magnetes berücksichtigt werden. 
