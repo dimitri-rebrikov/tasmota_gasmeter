@@ -124,7 +124,7 @@ Setzt den initialen Wert des internen Zählers auf den realen Wert vom Gaszähle
 In meinem Fall: 
 | | |
 |---|----|
-| Zählerstand | 1208,435 |
+| Zählerstand | 1208,432 |
 | Auflösung | 0,01 |
 | Zu setzende Wert des internen Tasmota-Zählers| 120843|
 
